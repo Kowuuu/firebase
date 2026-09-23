@@ -1,8 +1,13 @@
 'use client';
 
 import React, {useEffect, useState} from "react";
+import {useAuth} from "@/app/context/authContext";
+import {auth} from "@/app/firebase";
+import {signOut} from "firebase/auth"
 
 const SearchBar = () => {
+
+    const {loggedIn} = useAuth();
     //ukucamo nesto, ukljucimo tajmer, ako ukucamo umedjuvremenu300ms gasimo prethodni tajmes i palimo novi
     //ako tajmer istekne on poziva API
 
@@ -27,7 +32,14 @@ const SearchBar = () => {
         return()=>clearInterval(newTimer);
     },[searchTerm]);
 
+    const loggoutUser=(e)=>{
+        e.preventDefault();
+        signOut(auth);
+        window.location.reload();
+    }
+
     return <>
+        <div>{loggedIn ? <button>Logout</button> : <a href="user/login">Login</a> }</div>
         <form>
             <input
                 type="text"
